@@ -3,11 +3,15 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
-  // 除外パス
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
-    pathname.startsWith('/favicon.ico')
+    pathname.startsWith('/favicon.ico') ||
+    pathname.endsWith('manifest.json') ||
+    pathname.endsWith('site.webmanifest') ||
+    pathname.startsWith('/robots.txt') ||
+    pathname.startsWith('/sitemap.xml') ||
+    pathname.startsWith('/login') // ← ログイン画面自体も除外
   ) {
     return NextResponse.next()
   }
