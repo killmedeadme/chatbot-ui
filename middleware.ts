@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl
+
+  // 認証をかけたいパスだけ指定（例: ルート配下だけ）
+  if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
+    return NextResponse.next() // 必須ファイルには認証をかけない
+  }
+
   const basicAuth = req.headers.get('authorization')
 
   const USER = process.env.BASIC_AUTH_USER || ''
