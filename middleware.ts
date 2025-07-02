@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl
+  const pathname = req.nextUrl.pathname
 
-  // 認証をかけたいパスだけ指定（例: ルート配下だけ）
-  if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
-    return NextResponse.next() // 必須ファイルには認証をかけない
+  // 認証をかけたくないパス（必須のNext.js内部やAPI）
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico')) {
+    return NextResponse.next()
   }
 
   const basicAuth = req.headers.get('authorization')
