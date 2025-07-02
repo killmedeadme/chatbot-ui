@@ -3,11 +3,20 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname
 
-  // 認証をかけたくないパス（必須のNext.js内部やAPI）
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico')) {
+  // ✅ 認証をかけたくないパス（Next.js内部、API、PWA、SEO用ファイルを除外）
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.startsWith('/manifest.json') ||
+    pathname.startsWith('/site.webmanifest') ||
+    pathname.startsWith('/robots.txt') ||
+    pathname.startsWith('/sitemap.xml')
+  ) {
     return NextResponse.next()
   }
 
+  // ✅ Basic認証設定
   const basicAuth = req.headers.get('authorization')
 
   const USER = process.env.BASIC_AUTH_USER || ''
@@ -22,10 +31,15 @@ export function middleware(req: NextRequest) {
     }
   }
 
+  // ✅ 認証失敗
   return new Response('Unauthorized', {
     status: 401,
     headers: {
       'WWW-Authenticate': 'Basic realm="Secure Area"',
     },
   })
+}
+
+export const config = {
+  matcher: '/:path*',
 }
