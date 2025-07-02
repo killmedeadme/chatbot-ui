@@ -1,6 +1,6 @@
 // app/page.tsx
 import { redirect } from 'next/navigation'
 
-export default function RootPage() {
-  redirect('/ja')
+export default function RootPage(): JSX.Element {
+  return redirect('/ja')
 }
