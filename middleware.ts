@@ -41,5 +41,10 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: '/:path*',
+  matcher: [
+    /*
+     * Match all paths except for internal paths (_next) and public files that must be open.
+     */
+    '/((?!_next|api|favicon.ico|manifest.json|site.webmanifest|robots.txt|sitemap.xml).*)',
+  ],
 }
