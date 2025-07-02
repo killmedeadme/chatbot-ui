@@ -8,7 +8,7 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/favicon.ico') ||
-    pathname.startsWith('/manifest.json') ||
+    pathname.endsWith('manifest.json') ||   // ← endsWith に変更
     pathname.startsWith('/site.webmanifest') ||
     pathname.startsWith('/robots.txt') ||
     pathname.startsWith('/sitemap.xml')
