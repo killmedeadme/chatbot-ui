@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-export function middleware(req) {
+export function middleware(req: NextRequest) {
   const basicAuth = req.headers.get('authorization')
 
   const USER = process.env.BASIC_AUTH_USER || ''
