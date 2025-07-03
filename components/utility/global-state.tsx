@@ -123,27 +123,133 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
   }, [initialSession]);
 
   return (
-    <ChatbotUIContext.Provider
-      value={{
-        profile,
-        setProfile,
-        envKeyMap,
-        setEnvKeyMap,
-        availableHostedModels,
-        setAvailableHostedModels,
-        availableLocalModels,
-        setAvailableLocalModels,
-        availableOpenRouterModels,
-        setAvailableOpenRouterModels,
-        workspaces,
-        setWorkspaces,
-        workspaceImages,
-        setWorkspaceImages,
+  <ChatbotUIContext.Provider
+    value={{
+      // PROFILE STORE
+      profile,
+      setProfile,
 
-        // ぱんたす様の他の store はここに残してくださいませ！
-      }}
-    >
-      {children}
-    </ChatbotUIContext.Provider>
-  );
-};
+      // ITEMS STORE
+      assistants,
+      setAssistants,
+      collections,
+      setCollections,
+      chats,
+      setChats,
+      files,
+      setFiles,
+      folders,
+      setFolders,
+      models,
+      setModels,
+      presets,
+      setPresets,
+      prompts,
+      setPrompts,
+      tools,
+      setTools,
+      workspaces,
+      setWorkspaces,
+
+      // MODELS STORE
+      envKeyMap,
+      setEnvKeyMap,
+      availableHostedModels,
+      setAvailableHostedModels,
+      availableLocalModels,
+      setAvailableLocalModels,
+      availableOpenRouterModels,
+      setAvailableOpenRouterModels,
+
+      // WORKSPACE STORE
+      selectedWorkspace,
+      setSelectedWorkspace,
+      workspaceImages,
+      setWorkspaceImages,
+
+      // PRESET STORE
+      selectedPreset,
+      setSelectedPreset,
+
+      // ASSISTANT STORE
+      selectedAssistant,
+      setSelectedAssistant,
+      assistantImages,
+      setAssistantImages,
+      openaiAssistants,
+      setOpenaiAssistants,
+
+      // PASSIVE CHAT STORE
+      userInput,
+      setUserInput,
+      chatMessages,
+      setChatMessages,
+      chatSettings,
+      setChatSettings,
+      selectedChat,
+      setSelectedChat,
+      chatFileItems,
+      setChatFileItems,
+
+      // ACTIVE CHAT STORE
+      isGenerating,
+      setIsGenerating,
+      firstTokenReceived,
+      setFirstTokenReceived,
+      abortController,
+      setAbortController,
+
+      // CHAT INPUT COMMAND STORE
+      isPromptPickerOpen,
+      setIsPromptPickerOpen,
+      slashCommand,
+      setSlashCommand,
+      isFilePickerOpen,
+      setIsFilePickerOpen,
+      hashtagCommand,
+      setHashtagCommand,
+      isToolPickerOpen,
+      setIsToolPickerOpen,
+      toolCommand,
+      setToolCommand,
+      focusPrompt,
+      setFocusPrompt,
+      focusFile,
+      setFocusFile,
+      focusTool,
+      setFocusTool,
+      focusAssistant,
+      setFocusAssistant,
+      atCommand,
+      setAtCommand,
+      isAssistantPickerOpen,
+      setIsAssistantPickerOpen,
+
+      // ATTACHMENTS STORE
+      chatFiles,
+      setChatFiles,
+      chatImages,
+      setChatImages,
+      newMessageFiles,
+      setNewMessageFiles,
+      newMessageImages,
+      setNewMessageImages,
+      showFilesDisplay,
+      setShowFilesDisplay,
+
+      // RETRIEVAL STORE
+      useRetrieval,
+      setUseRetrieval,
+      sourceCount,
+      setSourceCount,
+
+      // TOOL STORE
+      selectedTools,
+      setSelectedTools,
+      toolInUse,
+      setToolInUse
+    }}
+  >
+    {children}
+  </ChatbotUIContext.Provider>
+);
