@@ -29,7 +29,8 @@ import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
 
 interface GlobalStateProps {
-  children: React.ReactNode
+  children: React.ReactNode;
+  initialSession: Session | null;
 }
 
 export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
