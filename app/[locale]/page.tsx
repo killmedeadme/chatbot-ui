@@ -1,28 +1,27 @@
 "use client"
 
-import { ChatbotUISVG } from "@/components/icons/chatbotui-svg"
-import { IconArrowRight } from "@tabler/icons-react"
-import { useTheme } from "next-themes"
-import Link from "next/link"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { createBrowserClient } from "@supabase/ssr"
+import { Database } from "@/supabase/types"
 
 export default function HomePage() {
-  const { theme } = useTheme()
+  const router = useRouter()
 
-  return (
-    <div className="flex size-full flex-col items-center justify-center">
-      <div>
-        <ChatbotUISVG theme={theme === "dark" ? "dark" : "light"} scale={0.3} />
-      </div>
+  useEffect(() => {
+    const supabase = createBrowserClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
-      <div className="mt-2 text-4xl font-bold">Chatbot UI</div>
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        router.push("/login")
+      } else {
+        router.push("/ja/your-workspaceid/chat") // あなたの保護したいページに
+      }
+    })
+  }, [router])
 
-      <Link
-        className="mt-4 flex w-[200px] items-center justify-center rounded-md bg-blue-500 p-2 font-semibold"
-        href="/login"
-      >
-        Start Chatting
-        <IconArrowRight className="ml-1" size={20} />
-      </Link>
-    </div>
-  )
+  return null
 }
