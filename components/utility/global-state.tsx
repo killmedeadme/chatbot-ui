@@ -253,3 +253,4 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
     {children}
   </ChatbotUIContext.Provider>
 );
+};
