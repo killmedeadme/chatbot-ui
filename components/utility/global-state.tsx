@@ -10,6 +10,7 @@ import {
   fetchOllamaModels,
   fetchOpenRouterModels
 } from "@/lib/models/fetch-models";
+import { supabase } from "@/lib/supabase/browser-client";
 import { Tables } from "@/supabase/types";
 import {
   ChatFile,
@@ -32,9 +33,9 @@ interface GlobalStateProps {
 }
 
 export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) => {
-  const router = useRouter();
+  const router = useRouter(); // ← Hook は外に出す！
 
-  // ✅ 必ず全ての state を定義！
+  // PROFILE STORE
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null);
 
   // ITEMS STORE
@@ -101,7 +102,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
   const [atCommand, setAtCommand] = useState("");
   const [isAssistantPickerOpen, setIsAssistantPickerOpen] = useState(false);
 
-  // ATTACHMENTS STORE
+  // ATTACHMENT STORE
   const [chatFiles, setChatFiles] = useState<ChatFile[]>([]);
   const [chatImages, setChatImages] = useState<MessageImage[]>([]);
   const [newMessageFiles, setNewMessageFiles] = useState<ChatFile[]>([]);
@@ -117,8 +118,9 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
   const [toolInUse, setToolInUse] = useState<string>("none");
 
   useEffect(() => {
-    const useExistingSession = async () => {
+    const fetchExistingSession = async () => {
       if (!initialSession) {
+        console.log("❌ No session, redirecting to /login");
         router.push("/login");
         return;
       }
@@ -129,6 +131,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
       setProfile(profile);
 
       if (!profile.has_onboarded) {
+        console.log("⚠️ User not onboarded, redirecting to /setup");
         router.push("/setup");
         return;
       }
@@ -140,13 +143,17 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
 
         if (profile["openrouter_api_key"] || hostedModelRes.envKeyMap["openrouter"]) {
           const openRouterModels = await fetchOpenRouterModels();
-          if (openRouterModels) setAvailableOpenRouterModels(openRouterModels);
+          if (openRouterModels) {
+            setAvailableOpenRouterModels(openRouterModels);
+          }
         }
       }
 
       if (process.env.NEXT_PUBLIC_OLLAMA_URL) {
         const localModels = await fetchOllamaModels();
-        if (localModels) setAvailableLocalModels(localModels);
+        if (localModels) {
+          setAvailableLocalModels(localModels);
+        }
       }
 
       const workspaces = await getWorkspacesByUserId(user.id);
@@ -177,15 +184,14 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
       }
     };
 
-    useExistingSession();
-  }, [initialSession]);
+    fetchExistingSession();
+  }, [initialSession, router]);
 
   return (
     <ChatbotUIContext.Provider
       value={{
         profile,
         setProfile,
-
         assistants,
         setAssistants,
         collections,
@@ -204,6 +210,8 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
         setPrompts,
         tools,
         setTools,
+        workspaces,
+        setWorkspaces,
 
         envKeyMap,
         setEnvKeyMap,
@@ -214,12 +222,10 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
         availableOpenRouterModels,
         setAvailableOpenRouterModels,
 
-        workspaces,
-        setWorkspaces,
-        workspaceImages,
-        setWorkspaceImages,
         selectedWorkspace,
         setSelectedWorkspace,
+        workspaceImages,
+        setWorkspaceImages,
 
         selectedPreset,
         setSelectedPreset,
