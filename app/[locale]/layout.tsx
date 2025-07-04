@@ -94,13 +94,9 @@ export default async function RootLayout({
             locale={locale}
             resources={resources}
           >
-            <Toaster richColors position="top-center" duration={3000} />
-            <div>
-  {session ? (
-    <GlobalState initialSession={session}>{children}</GlobalState>
-  ) : (
-    children
-  )}
+<Toaster richColors position="top-center" duration={3000} />
+<div>
+  <GlobalState initialSession={session}>{children}</GlobalState>
 </div>
           </TranslationsProvider>
         </Providers>
