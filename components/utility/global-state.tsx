@@ -117,13 +117,14 @@ export const GlobalState: FC<GlobalStateProps> = ({ children, initialSession }) 
   const [selectedTools, setSelectedTools] = useState<Tables<"tools">[]>([]);
   const [toolInUse, setToolInUse] = useState<string>("none");
 
-  useEffect(() => {
-    const fetchExistingSession = async () => {
-      if (!initialSession) {
-        console.log("❌ No session, redirecting to /login");
-        router.push("/login");
-        return;
-      }
+useEffect(() => {
+  if (!initialSession) {
+    console.log("❌ PANTAS: No session! Redirecting to login.");
+    router.push("/login");
+    return;
+  }
+  // あとは fetchStartingData() で profile や workspace をロード
+}, [initialSession, router]);
 
       const user = initialSession.user;
 
